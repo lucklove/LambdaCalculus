@@ -2,9 +2,9 @@ SET(TEST_SOURCES
 	test.cc
     lexical/Lexical.cc
     syntax/Syntax.cc
-    syntax/AST.cc
+    syntax/Term.cc
     parser/Parser.cc
-    ../src/AST.cc
+    ../src/Term.cc
 )
 
 ADD_EXECUTABLE(utlc_test ${TEST_SOURCES})

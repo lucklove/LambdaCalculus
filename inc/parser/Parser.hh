@@ -6,9 +6,9 @@ class Parser {
 private:
     Syntax syn_;
    
-    std::unique_ptr<Expr> evaluate(std::unique_ptr<Expr> ptr)
+    std::unique_ptr<Term> evaluate(std::unique_ptr<Term> ptr)
     {
-        std::unique_ptr<Expr> beta = ptr->betaReduction();
+        std::unique_ptr<Term> beta = ptr->betaReduction();
         if(*beta != *ptr)
             return evaluate(std::move(beta));
         return ptr->etaConversion();
@@ -20,30 +20,30 @@ public:
         syn_.setLexer(std::make_unique<Lexical>(is));
     }
 
-    std::unique_ptr<Expr> result()
+    std::unique_ptr<Term> result()
     {
         return evaluate(syn_.getPtr());
     }
  
-    static void dump(const Expr& tree, std::ostream& os) 
+    static void dump(const Term& tree, std::ostream& os) 
     {
-        if(typeid(tree) == typeid(IdentifierExpr))
+        if(typeid(tree) == typeid(Variable))
         {
-            os << dynamic_cast<const IdentifierExpr&>(tree).getName();
+            os << dynamic_cast<const Variable&>(tree).getName();
         }
-        else if(typeid(tree) == typeid(LambdaExpr))
+        else if(typeid(tree) == typeid(Lambda))
         {
             os << "(";
-            os << "λ " << dynamic_cast<const LambdaExpr&>(tree).getParamName() << "." << " ";
-            dump(dynamic_cast<const LambdaExpr&>(tree).getBodyRef(), os);
+            os << "λ " << dynamic_cast<const Lambda&>(tree).getParamName() << "." << " ";
+            dump(dynamic_cast<const Lambda&>(tree).getBodyRef(), os);
             os << ")";
         }
-        else if(typeid(tree) == typeid(MultiExpr))
+        else if(typeid(tree) == typeid(Application))
         {
             os << "(";
-            dump(dynamic_cast<const MultiExpr&>(tree).getFirstRef(), os);
+            dump(dynamic_cast<const Application&>(tree).getFirstRef(), os);
             os << " ";
-            dump(dynamic_cast<const MultiExpr&>(tree).getSecondRef(), os);
+            dump(dynamic_cast<const Application&>(tree).getSecondRef(), os);
             os << ")";
         }   
     }

@@ -1,6 +1,6 @@
 SET(UTLC_SRCS
     main.cc
-    AST.cc
+    Term.cc
 )
 
 INCLUDE_DIRECTORIES(../inc)

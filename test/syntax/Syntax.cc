@@ -9,12 +9,12 @@ BOOST_AUTO_TEST_CASE(syntax_test0)
     Syntax syn{std::make_unique<Lexical>(ss)};
     auto p = syn.getPtr();
     auto& ast = *p;
-    BOOST_REQUIRE(typeid(ast) == typeid(MultiExpr));
-    MultiExpr& m = dynamic_cast<MultiExpr&>(ast);
-    Expr& f = m.getFirstRef();
-    Expr& s = m.getSecondRef();
-    BOOST_REQUIRE(typeid(f) == typeid(MultiExpr));
-    BOOST_REQUIRE(typeid(s) == typeid(IdentifierExpr));
+    BOOST_REQUIRE(typeid(ast) == typeid(Application));
+    Application& m = dynamic_cast<Application&>(ast);
+    const Term& f = m.getFirstRef();
+    const Term& s = m.getSecondRef();
+    BOOST_REQUIRE(typeid(f) == typeid(Application));
+    BOOST_REQUIRE(typeid(s) == typeid(Variable));
 }
 
 BOOST_AUTO_TEST_CASE(syntax_test1)
@@ -23,12 +23,12 @@ BOOST_AUTO_TEST_CASE(syntax_test1)
     Syntax syn{std::make_unique<Lexical>(ss)};
     auto p = syn.getPtr();
     auto& ast = *p;
-    BOOST_REQUIRE(typeid(ast) == typeid(MultiExpr));
-    MultiExpr& m = dynamic_cast<MultiExpr&>(ast);
-    Expr& f = m.getFirstRef();
-    Expr& s = m.getSecondRef();
-    BOOST_REQUIRE(typeid(f) == typeid(MultiExpr));
-    BOOST_REQUIRE(typeid(s) == typeid(IdentifierExpr));
+    BOOST_REQUIRE(typeid(ast) == typeid(Application));
+    Application& m = dynamic_cast<Application&>(ast);
+    const Term& f = m.getFirstRef();
+    const Term& s = m.getSecondRef();
+    BOOST_REQUIRE(typeid(f) == typeid(Application));
+    BOOST_REQUIRE(typeid(s) == typeid(Variable));
 }
 
 BOOST_AUTO_TEST_CASE(syntax_test3)
@@ -37,6 +37,6 @@ BOOST_AUTO_TEST_CASE(syntax_test3)
     Syntax syn{std::make_unique<Lexical>(ss)};
     auto p = syn.getPtr();
     auto& ast = *p;
-    BOOST_REQUIRE(typeid(ast) == typeid(LambdaExpr));
-    BOOST_REQUIRE(dynamic_cast<LambdaExpr&>(ast).getParamName() == "x");
+    BOOST_REQUIRE(typeid(ast) == typeid(Lambda));
+    BOOST_REQUIRE(dynamic_cast<Lambda&>(ast).getParamName() == "x");
 }
