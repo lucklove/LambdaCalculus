@@ -4,6 +4,7 @@ SET(TEST_SOURCES
     syntax/Syntax.cc
     syntax/AST.cc
     parser/Parser.cc
+    ../src/AST.cc
 )
 
 ADD_EXECUTABLE(utlc_test ${TEST_SOURCES})

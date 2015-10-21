@@ -7,18 +7,18 @@ class Syntax {
 private:
     std::unique_ptr<Lexical> lexer_;
 
-    std::unique_ptr<ExprAST> parseIdentifierExpr()
+    std::unique_ptr<Expr> parseIdentifierExpr()
     {
         if(lexer_->getCurToken() != Token::ID)
             throw std::logic_error{"expect identifier in identifer-expr"};
-        auto ptr = std::make_unique<IdentifierExprAST>(lexer_->getIdentifier());
+        auto ptr = std::make_unique<IdentifierExpr>(lexer_->getIdentifier());
         lexer_->getNextToken();      /**< eat id */
         return std::move(ptr);
     }
 
-    std::unique_ptr<ExprAST> parseExpr()
+    std::unique_ptr<Expr> parseExpr()
     {
-        std::unique_ptr<ExprAST> first_ptr = nullptr;
+        std::unique_ptr<Expr> first_ptr = nullptr;
         switch(lexer_->getCurToken()) 
         {
             case Token::ID: first_ptr = parseIdentifierExpr(); break;
@@ -35,13 +35,13 @@ private:
             switch(lexer_->getCurToken()) 
             {
                 case Token::ID:
-                    first_ptr = std::make_unique<MultiExprAST>(std::move(first_ptr), parseIdentifierExpr());
+                    first_ptr = std::make_unique<MultiExpr>(std::move(first_ptr), parseIdentifierExpr());
                     break;
                 case Token::LAMBDA:
-                    first_ptr = std::make_unique<MultiExprAST>(std::move(first_ptr), parseLambdaExpr());
+                    first_ptr = std::make_unique<MultiExpr>(std::move(first_ptr), parseLambdaExpr());
                     break;
                 case Token::LBRACE:
-                    first_ptr = std::make_unique<MultiExprAST>(std::move(first_ptr), parseParenExpr());
+                    first_ptr = std::make_unique<MultiExpr>(std::move(first_ptr), parseParenExpr());
                     break;
                 default:
                     throw std::logic_error{"expect identifier, lambda, or '(' in multi-expr"};
@@ -50,7 +50,7 @@ private:
         return first_ptr;
     }
 
-    std::unique_ptr<ExprAST> parseLambdaExpr()
+    std::unique_ptr<Expr> parseLambdaExpr()
     {
         if(lexer_->getCurToken() != Token::LAMBDA)
             throw std::logic_error{"expect lambda at begin of lambda-expr"};
@@ -60,20 +60,20 @@ private:
         if(lexer_->getNextToken() != Token::BIND)
             throw std::logic_error{"expect '.' in lambda-expr"};
         lexer_->getNextToken();      /**< eat '.' */
-        return std::make_unique<LambdaExprAST>(param_name, parseExpr()); 
+        return std::make_unique<LambdaExpr>(param_name, parseExpr()); 
     }
 
-    std::unique_ptr<ExprAST> parseParenExpr()
+    std::unique_ptr<Expr> parseParenExpr()
     {
         if(lexer_->getCurToken() != Token::LBRACE)         
             throw std::logic_error{"expect '(' at begin of paren-expr"};
         if(lexer_->getNextToken() == Token::RBRACE)
             throw std::logic_error{"expect something between '(' and ')'"};
-        std::unique_ptr<ExprAST> ptr = parseExpr();
+        std::unique_ptr<Expr> ptr = parseExpr();
         if(lexer_->getCurToken() != Token::RBRACE) 
             throw std::logic_error{"expect ')' at end of paren-expr"};
         lexer_->getNextToken();      /**< eat ')' */
-        return std::move(ptr);
+        return ptr;
     }
 public:
     Syntax(std::unique_ptr<Lexical> lexer = nullptr) : lexer_{std::move(lexer)} {}
@@ -82,18 +82,18 @@ public:
         lexer_ = std::move(lexer);
     }
 
-    std::unique_ptr<ExprAST> getASTPtr()
+    std::unique_ptr<Expr> getPtr()
     {
         if(lexer_ == nullptr)
             throw std::logic_error{"lexer not set"};
         lexer_->getNextToken();
-        std::unique_ptr<ExprAST> ptr = parseExpr();
+        std::unique_ptr<Expr> ptr = parseExpr();
         switch(lexer_->getCurToken())
         {
             case Token::END: break;
             case Token::RBRACE: throw std::logic_error{"unexpect ')'"};
             default: throw std::logic_error{"unexpect token at end of input stream"};
         }
-        return std::move(ptr);
+        return ptr;
     }
 };

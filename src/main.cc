@@ -19,12 +19,12 @@ int main(int argc, char *argv[])
                 if(argc == 1)
                 {
                     parser.setContent(input_stream);
-                    parser.dumpAST(*parser.result(), std::cout);
+                    parser.dump(*parser.result(), std::cout);
                 }
                 else
                 {
                     Syntax syn{std::make_unique<Lexical>(input_stream)};
-                    Parser::dumpAST(*syn.getASTPtr(), std::cout);
+                    Parser::dump(*syn.getPtr(), std::cout);
                 }
                 std::cout << std::endl;
             }
@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
         {
             std::ifstream file{argv[1]};
             parser.setContent(file);
-            parser.dumpAST(*parser.result(), std::cout);
+            parser.dump(*parser.result(), std::cout);
             std::cout << std::endl;
         }
         catch(std::logic_error& e)
