@@ -2,7 +2,8 @@
 #include "syntax/Syntax.hh"
 #include <set>
 
-class Parser {
+class Parser 
+{
 private:
     Syntax syn_;
    

@@ -3,7 +3,8 @@
 #include <string>
 #include "Token.hh"
 
-class Lexical {
+class Lexical 
+{
 private:
     std::string token_buf_;
     std::istream& input_stream_;

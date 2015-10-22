@@ -3,7 +3,8 @@
 #include "Term.hh"
 #include "lexical/Lexical.hh"
 
-class Syntax {
+class Syntax 
+{
 private:
     std::unique_ptr<Lexical> lexer_;
 
