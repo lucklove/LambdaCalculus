@@ -1,8 +1,8 @@
 #[Lambda calculus](https://en.wikipedia.org/wiki/Lambda_calculus) interpreter   
 ##syntax    
-    expr ::= identifier      
-    expr ::= (lambda identifier expr)   
-    expr ::= (expr expr)    
+    <expr> ::= <identifier>      
+    <expr> ::= "(" "lambda" <identifier> <expr> ")"   
+    <expr> ::= "(" <expr> <expr> ")"    
 ##example   
     //FACT(3):
     >>>(λ f. ((λ x. f (x x)) (λ x. f (x x)))) (λ g. λ n. n (λ u. (λ m. λ n. λ f. m (n f)) n (g ((λ n. λ f. λ x. n (λ g. λ h. h (g f)) (λ u. x) (λ u. u)) n))) (λ f. λ x. f x)) (λ f. λ x. f (f (f x)))     
