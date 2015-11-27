@@ -1,8 +1,8 @@
-#include <boost/test/unit_test.hpp>
+#include "UnitTest.hh"
 #include <sstream>
 #include "syntax/Syntax.hh"
 
-BOOST_AUTO_TEST_CASE(syntax_test4)
+TEST_CASE(syntax_test4)
 {
     std::stringstream ss{" λ f. ((λ x. f (x x)) (λ x. f (x x)))"};
     Syntax syn{std::make_unique<Lexical>(ss)};
