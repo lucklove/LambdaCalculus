@@ -19,7 +19,7 @@ private:
         else 
         {
             input_stream_.unget();
-            if(token_buf_ == "lambda" || token_buf_ == "λ") 
+            if(token_buf_ == "\\" || token_buf_ == "λ") 
             {
                 return cur_token_ = Token::LAMBDA;
             }
